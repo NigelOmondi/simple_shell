@@ -94,9 +94,9 @@ typedef struct liststructure
 typedef struct storedata
 {
 	char *fname;
-	list_t *env;
-	list_t *history;
-	list_t *alias;
+	list_s *env;
+	list_s *history;
+	list_s *alias;
 	char **environ;
 	char *arg;
 	char **argv;
