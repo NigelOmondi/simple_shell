@@ -1,95 +1,94 @@
 #include "shell.h"
 /**
  * _mycd - function to change directory
- * @data: structure
+ * @info: structure
  * Return: Always 0
  */
-int _mycd(data_t *data)
+int _mycd(info_t *info)
 {
-	int wan;
-	char *b, *dir, buffer[1024];
+	int chdir_ret;
+	char *s, *dir, buffer[1024];
 
-	b = getcwd(buffer, 1024);
-	if (!b)
+	s = getcwd(buffer, 1024);
+	if (!s)
 		_puts("TODO: >>getcwd failure emsg here<<\n");
-	if (!data->argv[1])
+	if (!info->argv[1])
 	{
-		dir = _getenv(data, "HOME=");
+		dir = _getenv(info, "HOME=");
 		if (!dir)
-			ris =
-				ris((dir = _getenv(data, PWD = ')) ? dir : "/");
+			chdir_ret =
+				chdir((dir = _getenv(info, "PWD= ")) ? dir : "/");
 		else
-			ris = ris(dir);
+			chdir_ret = chdir(dir);
 	}
-	else if
-		(_strcmp(data->argv[1], "-" == 0)
-		{
-		if (!_getenv(data, "OLDPWD="))
+	else if	(_strcmp(info->argv[1], "-" == 0)
+	{
+		if (!_getenv(info, "OLDPWD="))
 		{
 			_puts(s);
 			_putchar('\n');
 			return (1);
 		}
 
-		_puts(_getenv(data, "OLDPWD=")), _putchar('\n');
-		ris=
-		ris((dir = getenv(data, "OLDPWD=")) ? dir : "/");
+		_puts(_getenv(info, "OLDPWD=")), _putchar('\n');
+		chdir_ret =
+		chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
-		ris = ris(data->argv[1]);
-	if (ris == -1)
+		chdir_ret = chdir(info->argv[1]);
+	if (chdir_ret == -1)
 	{
-		print_error(data, "can't cd to ");
-		_eputs(data->argv[1]), _eputchar('\n');
+		print_error(info, "can't cd to ");
+		_eputs(info->argv[1]), _eputchar('\n');
 	}
 
 	else
 	{
-		_setenv(data, "OLDPWD", _getenv(data, "PWD = "));
-		_setenv(data, "PWD", getcwd(buffer, 1024));
+		_setenv(info, "OLDPWD", _getenv(info, "PWD = "));
+		_setenv(info, "PWD", getcwd(buffer, 1024));
 	}
 
 	return (0);
 }
 /**
  * _myhelp - changes the current directory
- * @data: struct
+ * @info: struct
  * Return: Always 0
  */
-int _myhelp(data_t *data)
+int _myhelp(info_t *info)
 {
-	char **king;
+	char **arg_array;
 
-	king = data->argv;
+	arg_array = info->argv;
 	_puts("help call works. Function not yet implemented \n");
 	if (0)
-		_puts(*king);
+		_puts(*arg_array);
 	return (0);
 }
 /**
- *_myexit - exits shell
- *@data : structure
- *Return: exits with the status
+ *_myexit - exitchecks shell
+ *@info : structure
+ *Return: exitchecks with the status
  */
-int _myexit(data_t *data)
+int _myexit(info_t *info)
 {
-	int exit;
+	int exitcheck;
 
-	if (data->argv[1])
+	if (info->argv[1])
 	{
-		exit = _erratoi(data->argv[1]);
-		if (exit == -1)
+		exitcheck = _erratoi(info->argv[1]);
+		if (exitcheck == -1)
 		{
-			data->status = 2;
-			print_error(data, "Illegal number : ");
-			_eputs(data->argv[1]);
+			info->status = 2;
+			print_error(info, "Illegal number : ");
+			_eputs(info->argv[1]);
 			_eputchar('\n');
 			return (1);
 		}
-		data->err_num = _erratoi(data->argv[1]);
+		info->err_num = _erratoi(info->argv[1]);
 		return (-2);
 	}
-	data->err_num = -1;
+	info->err_num = -1;
 	return (-2);
 }
 
