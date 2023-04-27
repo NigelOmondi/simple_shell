@@ -1,15 +1,15 @@
 #include "shell.h"
 
 /**
- * main - this is the entry point of the program
- * @ac: the number of command line arguments
- * @av:  array of strings representing the arguments
+ * main - entry point
+ * @ac: arg count
+ * @av: arg vector
  *
- * Return: Always (0) success,on error return  1
+ * Return: 0 on success, 1 on error
  */
 int main(int ac, char **av)
 {
-	data_t info[] = { INFO_INIT };
+	info_t info[] = { INFO_INIT };
 	int fd = 2;
 
 	asm ("mov %1, %0\n\t"
@@ -33,12 +33,12 @@ int main(int ac, char **av)
 				_eputchar(BUF_FLUSH);
 				exit(127);
 			}
-			return (1);
+			return (EXIT_FAILURE);
 		}
 		info->readfd = fd;
 	}
 	populate_env_list(info);
 	read_history(info);
 	hsh(info, av);
-	return (0);
+	return (EXIT_SUCCESS);
 }
