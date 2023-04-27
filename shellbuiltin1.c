@@ -1,55 +1,55 @@
 #include "shell.h"
 /**
  * unset_alias - function to set alias
- * @data: struct
+ * @info: struct
  * @str: string
  * Return: On success, 0
  */
-int unset_alias(data_t *data, char *str)
+int unset_alias(info_t *info, char *str)
 {
-	int bro;
-	char *v, b;
+	int ret;
+	char *p, c;
 
-	v = _strchr(str, '=');
-	if (!v)
+	p = _strchr(str, '=');
+	if (!p)
 		return (1);
 
-	b = *v;
-	*v = 0;
-	bro = delete_node_at_index(&(data->alias),
-		get_node_index(data->alias, node_starts_with(data->alias, str, -1)));
-	*v = b;
-	return (bro);
+	c = *p;
+	*p = 0;
+	ret = delete_node_at_index(&(info->alias),
+		get_node_index(info->alias, node_starts_with(info->alias, str, -1)));
+	*p = c;
+	return (ret);
 }
 /**
  * _myalias - copies the alias
- * @data: struct
+ * @info: struct
  * Return: 0, if successful
  */
-int _myalias(data_t *data)
+int _myalias(info_t *info)
 {
-	char *v = NULL;
-	data_t *node = NULL;
-	int r = 0;
+	char *p = NULL;
+	list_t *node = NULL;
+	int i = 0;
 
-	if (data->argv == 1)
+	if (info->argc == 1)
 	{
-		node = data->alias;
-			while (node)
-			{
-				print_alias(node);
-				node = node->next;
-			}
-			return (0);
+		node = info->alias;
+		while (node)
+		{
+			print_alias(node);
+			node = node->next;
+		}
+		return (0);
 	}
 
-	for (r = 1; data->argv[r]; r++)
+	for (i = 1; info->argv[i]; i++)
 	{
-		v = _strchr(data->argv[r], '=');
-		if (v)
-			set_alias(data, data->argv[r];
+		p = _strchr(info->argv[i], '=');
+		if (p)
+			set_alias(info, info->argv[i];
 		else
-			print_alias(node_starts_with(data->alias, data->argv[r], '='));
+			print_alias(node_starts_with(info->alias, info->argv[i], '='));
 	}
 	return (0);
 }
@@ -76,34 +76,30 @@ int print_alias(list_s *node)
 }
 /**
  * _myhistory - displays history
- * @data: struct
+ * @info: struct
  * Return: 0
  */
-int _myhistory(data_t *data)
+int _myhistory(info_t *info)
 {
-	print_list(data->history);
+	print_list(info->history);
 	return (0);
 }
 /**
  * set_alias - sets alias
- * @data: struct
+ * @info: struct
  * @str: string
  * Return: on success,0
  */
-int set_alias(data_t *data, char *str)
+int set_alias(info_t *info, char *str)
 {
-	char *v;
+	char *p;
 
-	v = _strchr(str, '=');
-	if (!v)
+	p = _strchr(str, '=');
+	if (!p)
 		return (1);
-	if (!*++v)
-		return (unset_alias(data, str));
-	unset_alias(data, str);
-	return (add_node_end(&(data->alias), str, 0) == NULL);
+	if (!*++p)
+		return (unset_alias(info, str));
+	unset_alias(info, str);
+	return (add_node_end(&(info->alias), str, 0) == NULL);
 }
-
-
-
-
 
