@@ -1,38 +1,38 @@
 #include "shell.h"
 /**
  * is_delim - function for checking if its a delimeter
- * @d: character
+ * @c: character
  * @delim: string
  * Return: 0 if false
  */
-int is_delim(char d, char *delim)
+int is_delim(char c, char *delim)
 {
 	while (*delim)
-		if (*delim++ == d)
+		if (*delim++ == c)
 			return (1);
 	return (0);
 }
 
 /**
  * _atoi - function that converts a string to an integer
- * @c: string
+ * @s: string
  * Return: 0 if no number is converted to a string
  */
-int _atoi(char *c)
+int _atoi(char *s)
 {
-	unsigned int ris = 0;
-	int a, sign = 1, flag = 0, output;
+	unsigned int result = 0;
+	int i, sign = 1, flag = 0, output;
 
-	for (a = 0; c[a] != '\0' && flag != 2; a++)
+	for (i = 0; s[i] != '\0' && flag != 2; i++)
 	{
-		if (c[a] == '-')
+		if (s[i] == '-')
 			sign *= -1;
 
-		if (c[a] >= '0' && c[a] <= '9')
+		if (s[i] >= '0' && s[i] <= '9')
 		{
 			flag = 1;
-			ris *= 10;
-			ris += (c[a] - '0');
+			result *= 10;
+			result += (s[i] - '0');
 		}
 		else if (flag == 1)
 			flag = 2;
@@ -40,32 +40,32 @@ int _atoi(char *c)
 
 
 	if (sign == -1)
-		output = -ris;
+		output = -result;
 	else
-		output = ris;
+		output = result;
 
 	return (output);
 }
 /**
  * _isalpha - function to check an alphabet
- * @s: the character
+ * @c: the character
  * Return: 0 if not an alphabet
  */
-int _isalpha(int s)
+int _isalpha(int c)
 {
-	if ((s >= 'a' && s <= 'z') || (s >= 'A' && s <= 'Z'))
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		return (1);
 	else
 		return (0);
 }
 /**
  * interactive - check if shell is interactive mode
- * @data: struct address
+ * @info: struct address
  * Return: 0 if it is not in interactive mode
  */
-int interactive(data_t *data)
+int interactive(info_t *info)
 {
-	return (isatty(STDIN_FILENO) && data->readfd <= 2);
+	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 
 
