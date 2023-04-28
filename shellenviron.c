@@ -1,79 +1,79 @@
 #include "shell.h"
 /**
  * _getenv - gets value of environment
- * @data: struct
+ * @info: struct
  * @name: environments name
  * Return: 0 on success
  */
-char *_getenv(data_t *data, const char *name)
+char *_getenv(info_t *info, const char *name)
 {
-	list_s *node = data->env;
-	char *v;
+	list_t *node = info->env;
+	char *p;
 
 	while (node)
 	{
-		v = starts_with(node->str, name);
-		if (v && *v)
-			return (v);
+		p = starts_with(node->str, name);
+		if (p && *p)
+			return (p);
 		node = node->next;
 	}
 	return (NULL);
 }
 /**
  * populate_env_list - environment linked list
- * @data: struct
+ * @info: struct
  * Return: Always 0
  */
-int populate_env_list(data_t *data)
+int populate_env_list(info_t *info)
 {
 	list_s *node = NULL;
-	size_t e;
+	size_t i;
 
-	for (e = 0; environ[e]; e++)
-		add_node_end(&node, environ[e], 0);
-		data->env = node;
+	for (i = 0; environ[i]; i++)
+		add_node_end(&node, environ[i], 0);
+		info->env = node;
 		return (0);
 }
 /**
  * _myunsetenv - removes the environment
- * @data: struct
+ * @info: struct
  * Return: 0
  */
-int _myunsetenv(data_t *data)
+int _myunsetenv(info_t *info)
 {
-	int t;
+	int i;
 
-	if (data->argc == 1)
+	if (info->argc == 1)
 	{
 		eputs("Too few arguments.\n");
 		return (1);
 	}
-	for (t = 1; t <= data->argc; t++)
-	_unsetenv(data, data->argv[t]);
+	for (i = 1; i <= info->argc; i++)
+	_unsetenv(info, info->argv[i]);
 
 	return (0);
 }
 /**
  * _myenv - function that prints the current environment
- * @data: struct
+ * @info: struct
  * Return: 0
  */
-int _myenv(data_t *data)
+int _myenv(info_t *info)
 {
-	print_list_str(data->env);
+	print_list_str(info->env);
 	return (0);
 }
 /**
  * _mysetenv - initializes a new environment
- * @data: struct
+ * @info: struct
  * Return:0
  */
-int _mysetenv(data_t *data)
+int _mysetenv(info_t *info)
 {
-	if (_setenv(data, data->argv[1], info->argv[2]))
+	if (_setenv(info, info->argv[1], info->argv[2]))
 		return (0);
 
-	if (data->argc != 3)
+	if (info->argc != 3)
 	{
 		_eputs("Incorrect number of arguments\n");
 		return (1);
