@@ -1,89 +1,89 @@
 #include "shell.h"
 /**
  * _unsetenv - functions to unset the environment
- * @data: struct
+ * @info: struct
  * @var: var property
  * Return: 0
  */
-int _unsetenv(data_t *data, char *var)
+int _unsetenv(info_t *info, char *var)
 {
-	char *c;
-	list_s *node = data->env;
-	size_t a = 0;
+	char *p;
+	list_t *node = info->env;
+	size_t i = 0;
 
 	while (node)
 	{
-		c = starts_with(node->str, var);
-		if (c && *c == '=')
+		p = starts_with(node->str, var);
+		if (p && *p == '=')
 		{
-			data->env_changed = delete_node_at_index(&(data->env), a);
-			a = 0;
-			node = data->env;
+			info->env_changed = delete_node_at_index(&(info->env), i);
+			i = 0;
+			node = info->env;
 			continue;
 		}
 		node = node->next;
-		a++;
+		i++;
 	}
 
 	if (!node || !var)
 		return (0);
 
-	return (data->env_changed);
+	return (info->env_changed);
 }
 
 /**
  * get_environ - function to get the environment
- * @data: struct
+ * @info: struct
  * Return: 0
  */
-char **get_environ(data_t *data)
+char **get_environ(info_t *info)
 {
-	while (!data->environ || data->env_changed)
+	while (!info->environ || info->env_changed)
 	{
-		data->environ = list_to_strings(data->env);
-		data->env_changed = 0;
+		info->environ = list_to_strings(info->env);
+		info->env_changed = 0;
 	}
-	return (data->environ);
+	return (info->environ);
 }
 /**
  * _setenv - function to set up the environment
- * @data: struct
+ * @info: struct
  * @var: var property
- * @val: environment value
+ * @value: environment valueue
  * Return: 0
  */
-int _setenv(data *data, char *var, char *val)
+int _setenv(info *info, char *var, char *value)
 {
 	char *buf = NULL;
-	char *a;
-	list_s *node;
+	char *p;
+	list_t *node;
 
-	node = data->env;
+	node = info->env;
 	while (node)
 	{
-		a = starts_with(node->str, var);
-		if (a && *a == '=')
+		p = starts_with(node->str, var);
+		if (p && *p == '=')
 		{
 			free(node->str);
 			node->str = buf;
-			data->env_changed = 1;
+			info->env_changed = 1;
 			return (0);
 		}
 		node = node->next;
 	}
 
-	if (!var || !val)
+	if (!var || !value)
 		return (0);
 
-	buf = malloc(_strlen(var) + _strlen(val) + 2);
+	buf = malloc(_strlen(var) + _strlen(value) + 2);
 	if (!buf)
 		return (1);
 
 	_strcpy(buf, var);
 	_strcat(buf, "=");
-	_strcat(buf, val);
-	add_node_end(&(data->env), buf, 0);
+	_strcat(buf, value);
+	add_node_end(&(info->env), buf, 0);
 	free(buf);
-	data->env_changed = 1;
+	info->env_changed = 1;
 	return (0);
 }
