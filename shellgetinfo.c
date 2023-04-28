@@ -1,71 +1,71 @@
 #include "shell.h"
 /**
- * free_info - frees data_t
- * @data: struct
+ * free_info - frees info_t
+ * @info: struct
  * @all: true if freeing all
  */
 
-void free_info(data_t *data, int all)
+void free_info(info_t *info, int all)
 {
-	data->path = NULL;
-	data->argv = NULL;
-	ffree(data->argv);
+	info->path = NULL;
+	info->argv = NULL;
+	ffree(info->argv);
 	if (all)
 	{
-		if (data->env)
-			free_list(&(data->env));
-		if (data->cmd_buf)
-			free(data->arg);
-		if (data->history)
-			free_list(&(data->history));
-		if (data->alias)
-			free_list(&(data->alias));
-		ffree(data->environ)
-			data->environ = NULL;
-		bfree((void **)data->cmd_buf);
-		if (data->readfd > 2)
-			close(data->readfd);
+		if (info->env)
+			free_list(&(info->env));
+		if (!info->cmd_buf)
+			free(info->arg);
+		if (info->history)
+			free_list(&(info->history));
+		if (info->alias)
+			free_list(&(info->alias));
+		ffree(info->environ)
+			info->environ = NULL;
+		bfree((void **)info->cmd_buf);
+		if (info->readfd > 2)
+			close(info->readfd);
 		_putchar(BUF_FLUSH);
 	}
 }
 /**
- * clear_info - function to initialize data_t
- * @data: struct
+ * clear_info - function to initialize info_t
+ * @info: struct
  */
-void clear_info(data_t *data)
+void clear_info(info_t *info)
 {
-	data->path = NULL;
-	data->arg = NULL;
+	info->path = NULL;
+	info->arg = NULL;
 	info->argv = NULL;
 	info->argc = 0;
 }
 /**
- * set_info - function to initialize data_t
- * @data: struct
+ * set_info - function to initialize info_t
+ * @info: struct
  * @av: argument vector
  */
-void set_info(data_t *data, char **av)
+void set_info(info_t *info, char **av)
 {
-	int b = 0;
+	int i = 0;
 
-	data->fname = av[0];
-	if (data->argv)
+	info->fname = av[0];
+	if (info->argv)
 	{
-		data->argv = strtow(info->arg, " \t");
-		if (!data->argv)
+		info->argv = strtow(info->arg, " \t");
+		if (!info->argv)
 		{
-			data->argv = malloc(sizeof(char *) * 2);
-			if (data->argv)
+			info->argv = malloc(sizeof(char *) * 2);
+			if (info->argv)
 			{
-				data->argv[0] = _strdup(data->argv);
-				data->argv[1] = NULL;
+				info->argv[0] = _strdup(info->argv);
+				info->argv[1] = NULL;
 			}
 		}
-		for (b = 0; data->argv && data->argv[b]; b++)
+		for (i = 0; info->argv && info->argv[i]; i++)
 			;
-		data->argc = b;
+		info->argc = i;
 
-		replace_alias(data);
-		replace_vars(data);
+		replace_alias(info);
+		replace_vars(info);
 	}
 }
