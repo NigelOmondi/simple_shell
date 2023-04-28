@@ -14,7 +14,7 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 	if (!*len)
 	{
 		free(*buf);
-		*buff = NULL;
+		*buf = NULL;
 		signal(SIGINT, sigintHandler);
 
 #if USE_GETLINE
@@ -106,7 +106,7 @@ ssize_t get_input(info_t *info)
 			info->cmd_buf_type = CMD_NORM;
 		}
 
-		**buf_p = p;
+		*buf_p = p;
 		return (_strlen(p));
 	}
 
@@ -154,7 +154,7 @@ int _getline(info_t *info, char **ptr, size_t *length)
 
 	i = k;
 	p = new_p;
-	s += k - ei
+	s += k - i;
 
 	if (length)
 		*length = s;
