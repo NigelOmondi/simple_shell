@@ -1,5 +1,31 @@
 #include "shell.h"
 
+<<<<<<< HEAD
+=======
+void free_info(info_t *info, int all)
+{
+	info->path = NULL;
+	info->argv = NULL;
+	ffree(info->argv);
+	if (all)
+	{
+		if (info->env)
+			free_list(&(info->env));
+		if (!info->cmd_buf)
+			free(info->arg);
+		if (info->history)
+			free_list(&(info->history));
+		if (info->alias)
+			free_list(&(info->alias));
+		ffree(info->environ);
+			info->environ = NULL;
+		bfree((void **)info->cmd_buf);
+		if (info->readfd > 2)
+			close(info->readfd);
+		_putchar(BUF_FLUSH);
+	}
+}
+>>>>>>> 7aa5131585d6c4773602068b2fbb11553e06f147
 /**
  * clear_info - initializes info_t struct
  * @info: struct address
