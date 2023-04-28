@@ -81,13 +81,8 @@ ssize_t get_input(info_t *info)
 			info->cmd_buf_type = CMD_NORM;
 		}
 
-<<<<<<< HEAD:shellgetLine.c
 		*buf_p = p; /* pass back pointer to current command position */
 		return (_strlen(p)); /* return length of current command */
-=======
-		*buf_p = p;
-		return (_strlen(p));
->>>>>>> 1e1e2e0e22049be667fcd357da45114a5e12b1a7:shellgetline.c
 	}
 
 	*buf_p = buf; /* else not a chain, pass back buffer from _getline() */
@@ -154,10 +149,6 @@ int _getline(info_t *info, char **ptr, size_t *length)
 	s += k - i;
 	i = k;
 	p = new_p;
-<<<<<<< HEAD:shellgetLine.c
-=======
-	s += k - i;
->>>>>>> 1e1e2e0e22049be667fcd357da45114a5e12b1a7:shellgetline.c
 
 	if (length)
 		*length = s;
