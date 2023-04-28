@@ -1,44 +1,45 @@
 #include "shell.h"
 /**
  * input_buf - function to buffer the chained commands
- * @data: struct
+ * @info: struct
  * @buf: buffer
- * @length: address of the variable length
+ * @len: address of the variable length
  * Return: the bytes
  */
-ssize_t input_buf(data_t *data, char **buf, size_t *length)
+ssize_t input_buf(info_t *info, char **buf, size_t *len)
 {
-	ssize_t a = 0;
-	size_t length_r = 0;
+	ssize_t r = 0;
+	size_t len_p = 0;
 
-	if (!*length)
+	if (!*len)
 	{
 		free(*buf);
 		*buff = NULL;
 		signal(SIGINT, sigintHandler);
 
 #if USE_GETLINE
-		a = getline(buf, &length_r, stdin);
+		r = getline(buf, &len_p, stdin);
 #else
-		a = _getline(data, buf, &length_r);
+		r = _getline(info, buf, &len_p);
 #endif
-	if (a > 0)
-	{
-		if ((*buf)[a - 1] == '\n')
+		if (r > 0)
 		{
-			(*buf)[a - 1] = '\0';
-			a--;
-		}
-		data->linecount_flag = 1;
-		remove_comments(*buf);
-		build_history_list(data, *buf, data->histcount++);
+			if ((*buf)[r - 1] == '\n')
+			{
+				(*buf)[r - 1] = '\0';
+				r--;
+			}
+			info->linecount_flag = 1;
+			remove_comments(*buf);
+			build_history_list(info, *buf, info->histcount++);
 
-		{
-			*length = a;
-			data->cmd_buf = buf;
+			{
+				*len = r;
+				info->cmd_buf = buf;
+			}
 		}
 	}
-	}
+	return (r);
 }
 /**
  * sigintHandler -function to block the control c function
@@ -53,111 +54,111 @@ void sigintHandler(__attribute__((unused))int sig_num)
 }
 /**
  * read_buf - function to read a buffer
- * @data: struct
+ * @info: struct
  * @buf: the buffer
- * @a: the size
+ * @i: the size
  * Return: the variable of reading a buffer
  */
-ssize_t read_buf(data_t *data, char *buf, size_t *a)
+ssize_t read_buf(info_t *info, char *buf, size_t *i)
 {
-	ssize_t c = 0;
+	ssize_t r = 0;
 
-	if (c >= 0)
-		*a = c;
+	if (r >= 0)
+		*i = r;
 
-	if (*a)
+	if (*i)
 		return (0);
-	c = read(data->readfd, buf, READ_BUF_SIZE);
+	r = read(info->readfd, buf, READ_BUF_SIZE);
 
-	return (c);
+	return (r);
 }
 /**
  * get_input - function to get an input
- * @data: struct
+ * @info: struct
  * Return: the function should return the bytes read
  */
-ssize_t get_input(data_t *data)
+ssize_t get_input(info_t *info)
 {
-	static size_t a, b, length;
+	static size_t i, j, len;
 	static char *buf;
-	ssize_t c = 0;
-	char **buf_r = &(data->argv), *r;
+	ssize_t r = 0;
+	char **buf_p = &(info->arg), *p;
 
 	_putchar(BUF_FLUSH);
-	p = input_buf(data, &buf, &length);
+	r = input_buf(info, &buf, &len);
 
-	if (length)
+	if (len)
 	{
-		b = a;
-		r = buf + a;
+		j = i;
+		p = buf + i;
 
-		check_chain(data, buf, &b, a, length);
-		while (b < length)
+		check_chain(info, buf, &j, i, len);
+		while (j < len)
 		{
-			if (is_chain(data, buf, &b))
+			if (is_chain(info, buf, &j))
 				break;
-			b++;
+			j++;
 		}
-		a = b + 1;
-		if (a >= length)
+		i = j + 1;
+		if (i >= len)
 		{
-			a = length = 0;
-			data->cmd_buf_type = CMD_NORM;
+			i = len = 0;
+			info->cmd_buf_type = CMD_NORM;
 		}
 
-		*buf_r = r;
-		return (_strlen(r));
+		**buf_p = p;
+		return (_strlen(p));
 	}
 
-	if (p == -1)
+	if (r == -1)
 		return (-1);
 
 	*buf_p = buf;
-	return (p);
+	return (r);
 }
 /**
  * _getline - function to get the next line of input
- * @data: struct
+ * @info: struct
  * @ptr: the address of the pointer
- * @len: the size
+ * @length: the size
  * Return: the value
  */
-int _getline(data_t *data, char **ptr, size_t *len)
+int _getline(info_t *info, char **ptr, size_t *length)
 {
-	size_t a;
-	ssize_t b = 0, c = 0;
+	size_t k;
+	ssize_t r = 0, s = 0;
 	static char buf[READ_BUF_SIZE];
-	char *p = NULL, *new_p = NULL, *d;
-	static size_t e, length;
+	char *p = NULL, *new_p = NULL, *c;
+	static size_t i, len;
 
-	a = d ? 1 + (unsigned int)(d - buf) : length;
-	b = read_buf(data, buf, &length);
-	if (b == -1 || (b == 0 && length == 0))
+	k = c ? 1 + (unsigned int)(c - buf) : len;
+	r = read_buf(info, buf, &len);
+	if (r == -1 || (r == 0 && len == 0))
 		return (-1);
 
 	p = *ptr;
-	if (p && len)
-		c = *len;
-	if (e == length)
-		e = length = 0;
+	if (p && length)
+		s = *length;
+	if (i == len)
+		i = len = 0;
 
-	d = _strchr(buf + e, '\n');
-	new_p = _realloc(p, c, c ? c + a : a + 1);
+	c = _strchr(buf + i, '\n');
+	new_p = _realloc(p, s, s ? s + k : k + 1);
 	if (!new_p)
 		return (p ? free(p), -1 : -1);
 
-	if (b)
-		_strncat(new_p, buf + e, a - e);
+	if (s)
+		_strncat(new_p, buf + i, k - i);
 	else
-		_strncpy(new_p, buf + e, a - e + 1);
+		_strncpy(new_p, buf + i, k - i + 1);
 
-	e = a;
+	i = k;
 	p = new_p;
-	c += a - e;
+	s += k - ei
 
-	if (len)
-		*len = c;
+	if (length)
+		*length = s;
 
 	*ptr = p;
-	return (c);
+	return (s);
 }
