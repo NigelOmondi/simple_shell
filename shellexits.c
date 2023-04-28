@@ -1,72 +1,72 @@
 #include "shell.h"
 /**
  * *_strncat - function to concatenate two strings
- * @str1: the first string
- * @str2: the second string
+ * @dest: the first string
+ * @src: the second string
  * @n: number of bytes
  * Return: the full string
  */
-char *_strncat(char *str1, char *str2, int n)
+char *_strncat(char *dest, char *src, int n)
 {
-	int a, b;
-	char *s = str1;
+	int i, j;
+	char *s = dest;
 
-	a = 0;
-	b = 0;
+	i = 0;
+	j = 0;
 
-	if (b < n)
-		str1[a] = '\0';
+	if (j < n)
+		dest[i] = '\0';
 
-	while (str1[a] != '\0')
-		a++;
-	while (str2[b] != '\0' && b < n)
+	while (dest[i] != '\0')
+		i++;
+	while (src[j] != '\0' && j < n)
 	{
-		str1[a] = str2[b];
-		a++;
-		b++
+		dest[i] = src[j];
+		i++;
+		j++
 	}
 	return (s);
 }
 /**
  * *_strchr - function to locate a character
- * @a: parsed string
- * @b: character
+ * @s: parsed string
+ * @c: character
  * Return: a pointer
  */
-char *_strchr(char *a, char b)
+char *_strchr(char *s, char c)
 {
 	do {
-		if (*a ==  b)
-			return (a);
-	} while (*a++ != '\0');
+		if (*s ==  c)
+			return (s);
+	} while (*s++ != '\0');
 
 	return (NULL);
 }
 /**
  * *_strncpy - function to copy a string
- * @str1: destination string
- * @str2: source string
+ * @dest: destination string
+ * @src: source string
  * @n: number of characters
  * Return: copied string
  */
-char *_strncpy(char *str1, char *str2, int n)
+char *_strncpy(char *dest, char *src, int n)
 {
-	int a, b;
-	char *s = str1;
+	int i, j;
+	char *s = dest;
 
-	a = 0;
-	while (str2[a] != '\0' && a < n - 1)
+	i = 0;
+	while (src[i] != '\0' && i < n - 1)
 	{
-		str1[a] = str2[a];
-		a++;
+		dest[i] = src[i];
+		i++;
 	}
-	if (a < n)
+	if (i < n)
 	{
-		b = a;
-		while (b < n)
+		j = i;
+		while (j < n)
 		{
-			str1[b] = '\0';
-			b++;
+			dest[j] = '\0';
+			j++;
 		}
 	}
 	return (s);
