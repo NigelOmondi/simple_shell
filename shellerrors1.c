@@ -1,31 +1,31 @@
 #include "shell.h"
 /**
  * print_error - function to print the error message
- * @data: struct
+ * @info: struct
  * @estr: string
  * Return: -1 on an error
  */
-void print_error(data_t *data, char *estr)
+void print_error(info_t *info, char *estr)
 {
-	_eputs(data->fname);
+	_eputs(info->fname);
 	_eput(": ");
-	print_d(data->line_count, STDERR_FILENO);
+	print_d(info->line_count, STDERR_FILENO);
 	_eputs(": ");
-	_eputs(data->argv[0]);
+	_eputs(info->argv[0]);
 	_eputs(": ");
 	_eputs(estr);
 }
 /**
  * convert_number - converts a number
- * @number: the number
+ * @num: the number
  * @base: thr base number
  * @flags: arguments
  * Return: return the string
  */
-char *convert_number(long int number, int base, int flags)
+char *convert_number(long int num, int base, int flags)
 {
 	char sign = 0;
-	unsigned long n = number;
+	unsigned long n = num;
 	char *ptr;
 	static char buffer[50];
 	static char *array;
@@ -33,9 +33,9 @@ char *convert_number(long int number, int base, int flags)
 	if (sign)
 		*--ptr = sign;
 
-	if (!(flags & CONVVERT_UNSIGNED) && number < 0)
+	if (!(flags & CONVVERT_UNSIGNED) && num < 0)
 	{
-		n = -number;
+		n = -num;
 		sign = '-';
 	}
 	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
@@ -56,40 +56,40 @@ char *convert_number(long int number, int base, int flags)
  */
 void remove_comments(char *buf)
 {
-	int c;
+	int i;
 
-	for (c = 0; buf[c] != '\0'; c++)
-		if (buf[c] == '#' && (!c || buf[c - 1] == ' '))
+	for (i = 0; buf[i] != '\0'; i++)
+		if (buf[i] == '#' && (!i || buf[i - 1] == ' '))
 		{
-			buf[c] = '\0';
+			buf[i] = '\0';
 			break;
 		}
 }
 /**
  * _erratoi - function to convert a string to an integer
- * @d: string
+ * @s: string
  * Return: -1 if an error occurs
  */
-int _erratoi(char *d)
+int _erratoi(char *s)
 {
-	int c = 0;
-	unsigned long int ris = 0;
+	int i = 0;
+	unsigned long int result = 0;
 
-	if (*d == '+')
+	if (*s == '+')
 		s++;
-	for (c = 0; d[c] !+'\0'; c++)
+	for (i = 0; s[i] !+'\0'; i++)
 	{
-		if (d[c] >= '0' && d[c] <= '9')
+		if (s[i] >= '0' && s[i] <= '9')
 		{
-			res *= 10;
-			res = res + (d[c] - '0');
-			if (res > INT_MAX)
+			result *= 10;
+			result = result + (s[i] - '0');
+			if (result > INT_MAX)
 				return (-1);
 		}
 		else
 			return (-1);
 	}
-	return (res);
+	return (result);
 }
 /**
  * print_d - prints a decimal integer
@@ -99,18 +99,18 @@ int _erratoi(char *d)
  */
 int print_d(int input, int fd)
 {
-	int c, count = 0;
-	unsigned int uhu, wan;
+	int i, count = 0;
+	unsigned int _abs_, current;
 	int (*__putchar)(char) = _putchar;
 
-	for (c = 1000000000; c > 1; c /= 10)
+	for (i = 1000000000; i > 1; i /= 10)
 	{
-		if (uhu / c)
+		if (_abs_ / i)
 		{
-			__putchar('0' + wan / c);
+			__putchar('0' + current / i);
 			count++;
 		}
-		wan = wan % c;
+		current = current % i;
 	}
 
 	if (fd == STDERR_FILENO)
@@ -118,15 +118,15 @@ int print_d(int input, int fd)
 
 	if (input < 0)
 	{
-		uhu = -input;
+		_abs_ = -input;
 		__putchar('-');
 		count++
 	}
 	else
-		uhu = input;
-	wan = uhu;
+		_abs_ = input;
+	current = _abs_;
 
-	__putchar('0' + wan);
+	__putchar('0' + current);
 	count++;
 
 	return (count);
