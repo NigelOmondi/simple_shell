@@ -7,17 +7,17 @@
  */
 int _putsfd(char *str, int fd)
 {
-	int b = 0;
+	int i = 0;
 
 	while (*str)
 	{
-		b = b + _putfd(*str++, fd);
+		i = i + _putfd(*str++, fd);
 	}
 
 	if (!str)
 		return (0);
 
-	return (b);
+	return (i);
 }
 /**
  * _eputchar - writes character to stderr
@@ -27,15 +27,15 @@ int _putsfd(char *str, int fd)
 int _eputchar(char c)
 {
 	static char buf[WRITE_BUF_SIZE];
-	static int b;
+	static int i;
 
 	if (c != BUF_FLUSH)
-		buf[b++] = c;
+		buf[i++] = c;
 
-	if (c == BUF_FLUSH || b >= WRITE_BUF_SIZE)
+	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
-		write(2, buf, b);
-		b = 0;
+		write(2, buf, i);
+		i = 0;
 	}
 
 	return (1);
@@ -47,12 +47,12 @@ int _eputchar(char c)
  */
 void _eputs(char *str)
 {
-	int b = 0;
+	int i = 0;
 
-	while (str[b] != '\0')
+	while (str[i] != '\0')
 	{
-		_eputchar(str[b]);
-		b++;
+		_eputchar(str[i]);
+		i++;
 	}
 
 	if (!str)
@@ -67,15 +67,15 @@ void _eputs(char *str)
 int _putfd(char c, int fd)
 {
 	static char buf[WRITE_BUF_SIZE];
-	static int b;
+	static int i;
 
 	if (c != BUF_FLUSH)
-		buf[b++] = c;
+		buf[i++] = c;
 
-	if (c == BUF_FLUSH || b >= WRITE_BUF_SIZE)
+	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
-		write(fd, buf, b);
-		b = 0;
+		write(fd, buf, i);
+		i = 0;
 	}
 
 	return (1);
