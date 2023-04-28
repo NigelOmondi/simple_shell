@@ -52,7 +52,7 @@ char **get_environ(info_t *info)
  * @value: environment valueue
  * Return: 0
  */
-int _setenv(info *info, char *var, char *value)
+int _setenv(info_t *info, char *var, char *value)
 {
 	char *buf = NULL;
 	char *p;
